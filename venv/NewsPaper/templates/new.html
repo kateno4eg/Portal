@@ -1,0 +1,16 @@
+<!--  наследуемся от шаблона default.html, который мы создавали ещё во времена flatpages -->
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+
+<!-- Название у нас будет posts -->
+{% block title %}
+Posts
+{% endblock title %}
+
+<!-- В контенте на странице мы выводим сам товар, ID которого было передано в адрес -->
+{% block content %}
+<h1 align="left">{{ new.post_created_on }}</h1>
+<h2 align="left">{{ new.title|censor }}</h2>
+<h5 align="justify">{{ new.article_text|censor }}</h5>
+{% endblock content %}
