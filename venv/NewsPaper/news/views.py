@@ -37,7 +37,7 @@ class NewsCreateView(CreateView):
 
 
 class NewsUpdateView(UpdateView):
-    template_name = 'news/add.html'
+    template_name = 'news/edit.html'
     form_class = PostForm
 
     def get_object(self, **kwargs):
