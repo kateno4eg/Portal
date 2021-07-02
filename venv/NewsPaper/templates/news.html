@@ -1,46 +1,65 @@
 <!--  наследуемся от шаблона default.html, который мы создавали ещё во времена flatpages -->
 {% extends 'flatpages/default.html' %}
 
-{% load custom_filters %}
+{% block title %} Posts {% endblock title %}
 
-<!-- Название у нас будет posts -->
-{% block title %}
-Posts
-{% endblock title %}
-
-<!-- В контенте на странице мы выводим все товары -->
 {% block content %}
-    <h1>Все новости</h1>
-    <hr>
-    {% if news %} <!-- Если есть товары, то выводим таблицу с ними -->
-        <table>
-            <tr>
-                <td>
-                    Заголовок
-                </td>
-                <td>
-                    Дата публикации
-                </td>
-                <td>
-                    Предпросмотр
-                </td>
-            </tr>
-        {% for new in news %}
-            <tr>
-                <td>
-                    {{ new.title|censor }}
-                </td>
-                <td>
-                    {{ new.post_created_on }} <!-- дописываем специальный фильтр, чтобы ограничить количество символов до 20. Все остальные символы превратятся в многоточие. -->
-                </td>
-                <td>
-                    {{ new.article_text|truncatechars:50 }}
-                </td>
-                <td>
-            </tr>
-        {% endfor %}
-        </table>
-    {% else %}
-        <h2>Новостей нет!</h2>
+
+<table>
+    <thead>
+        <th>
+            Все Новости
+        </th>
+        <th>
+            Дата
+        </th>
+        <th>
+            Предпросмотр
+        </th>
+    </thead>
+    {% for news in news %}
+    <tr>
+        <td>
+            <a href="{% url 'new' news.id %}">{{ news.title }}</a>
+            <a href="{% url 'edit' news.id %}"><u>Редактировать</u></a>
+            <a href="{% url 'delete' news.id %}"><u> Удалить </u></a>
+
+        </td>
+        <td>
+            {{ news.post_created_on }}
+        </td>
+        <td>
+            {{ news.article_text|truncatechars:150 }}
+        </td>
+    </tr>
+    {% endfor %}
+</table> <br>
+
+<a href="{% url 'add' %}">Добавить  новость</a> <br>
+<!-- Проверяем что поддерживается постраничный вывод -->
+{% if is_paginated %}
+
+    <!-- Если доступна предыдущая страница, то даём ссылку на неё и самую первую страницу -->
+    {% if page_obj.has_previous %}
+        <a href="?page=1">First</a>
+        <a href="?page={{ page_obj.previous_page_number }}"><<<</a>
     {% endif %}
+
+    <!-- Показываем только текущую страницу и ближайшие к ней, чтобы список не тянулся и не захламлял страницу -->
+    {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+            <a>{{ num }}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <a href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+
+    <!-- Если есть следующая страница, то даём ссылку на неё и на самую последнюю страницу -->
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">>>></a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+    {% endif %}
+
+{% endif %}
+
 {% endblock content %}

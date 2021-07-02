@@ -1,0 +1,35 @@
+{% extends 'flatpages/default.html' %}
+ 
+{% block title %} Posts {% endblock title %}
+ 
+{% block content %}
+<h2>Вы действительно хотите удалить данный товар?</h2>
+<table>
+    <thead>
+        <th>
+            Name
+        </th>
+        <th>
+            Created on
+        </th>
+        <th>
+            Preview
+        </th>
+    </thead>
+    <tr>
+        <td>
+            {{ new.title }}
+        </td>
+        <td>
+            {{ new.post_created_on|date:'y-m-d'}}
+        </td>
+        <td>
+            {{ new.article_text|truncatechars:50 }}
+        </td>
+    </tr>
+</table>
+ 
+<form method="POST">
+    {% csrf_token %}
+    <input type="submit" value="подтвердить"></form>
+{% endblock content %} 

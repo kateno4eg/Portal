@@ -1,0 +1,14 @@
+<!--  наследуемся от шаблона default.html, который мы создавали ещё во времена flatpages -->
+{% extends 'flatpages/default.html' %}
+
+{% block title %} Posts {% endblock title %}
+
+{% block content %}
+
+<h1 align="left">{{ new.title }}</h1>
+<h4 align="left">{{ new.post_created_on }}</h4>
+<p align="justify">{{ new.article_text }}</p> <br>
+
+<p><a href="/news/">На Главную</a></p>
+
+{% endblock content %}

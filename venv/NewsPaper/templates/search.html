@@ -1,0 +1,42 @@
+<!--  наследуемся от шаблона default.html, который мы создавали ещё во времена flatpages -->
+{% extends 'flatpages/default.html' %}
+
+{% block title %} Posts {% endblock title %}
+
+{% block content %}
+
+<h1>Поиск по публикациям</h1>
+
+<form method="GET">
+    {{ filter.form }}
+    <input type="submit" value="Найти">
+</form>
+
+<table>
+    <thead>
+        <th>
+            Name
+        </th>
+        <th>
+            Created on
+        </th>
+        <th>
+            Preview
+        </th>
+    </thead>
+    {% for news in filter.qs %}
+    <tr>
+        <td>
+            {{ news.title }}
+        </td>
+        <td>
+            {{ news.post_created_on|date:'y-m-d'}}
+        </td>
+        <td>
+            {{ news.article_text|truncatechars:50 }}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock content %}
