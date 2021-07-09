@@ -3,13 +3,13 @@ from django.views.generic import ListView, UpdateView, CreateView, DeleteView, D
 from django.core.paginator import Paginator
 from .models import Post, Author, Category, Comment
 from .filters import PostFilter
-from .forms import PostForm
+from .forms import PostForm, UserForm
 
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views.generic import TemplateView
 
 from django.shortcuts import redirect
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
 
 
@@ -38,12 +38,14 @@ class NewsDetailView(DetailView):
     queryset = Post.objects.all()
 
 
-class NewsCreateView(LoginRequiredMixin, CreateView):
+class NewsCreateView(PermissionRequiredMixin, CreateView):
+    permission_required = ('NewsPaper.add_post')
     template_name = 'news/add.html'
     form_class = PostForm
 
 
-class NewsUpdateView(LoginRequiredMixin, UpdateView):
+class NewsUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_required = ('NewsPaper.edit_post')
     template_name = 'news/edit.html'
     form_class = PostForm
 
@@ -52,15 +54,20 @@ class NewsUpdateView(LoginRequiredMixin, UpdateView):
         return Post.objects.get(pk=id)
 
 
-class NewsDeleteView(LoginRequiredMixin, DeleteView):
-    template_name = 'news/delete.html'
-    context_object_name = 'new'
-    queryset = Post.objects.all()
-    success_url = '/news/'
+class UserUpdateView(LoginRequiredMixin, UpdateView):
+    template_name = 'profile.html'
+    form_class = UserForm
+    success_url = '/profile/'
 
-class ProtectedView(LoginRequiredMixin, TemplateView):
-    template_name = 'protect/index.html'
-    
+    def get_object(self, **kwargs):
+        id = self.request.user.id
+        return User.objects.get(pk=id)
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_not_authors'] = not self.request.user.groups.filter(name = 'authors').exists()
+        return context
 
 @login_required
 def upgrade_me(request):
@@ -69,3 +76,10 @@ def upgrade_me(request):
     if not request.user.groups.filter(name='authors').exists():
         premium_group.user_set.add(user)
     return redirect('/')
+
+
+class NewsDeleteView(DeleteView):
+    template_name = 'news/delete.html'
+    context_object_name = 'new'
+    queryset = Post.objects.all()
+    success_url = '/news/'

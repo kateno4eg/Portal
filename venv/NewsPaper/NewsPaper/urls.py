@@ -15,10 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from news import views
+from django.views.generic import RedirectView
+from news.views import UserUpdateView, upgrade_me
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('pages/', include('django.contrib.flatpages.urls')),
-    path('news/', include('news.urls')),
+    path('', include('news.urls')),
+    path('profile/', UserUpdateView.as_view()),
+    path('profile/upgrade/', upgrade_me, name = 'upgrade'),
     path('accounts/', include('allauth.urls'))
 ]
