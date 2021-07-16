@@ -25,6 +25,10 @@ class Author(models.Model):
 
 class Category(models.Model):
     category_name = models.CharField(max_length=255, unique=True)
+    subscribers = models.ManyToManyField(User, blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.category_name}'
 
 class Post(models.Model):
 
@@ -62,8 +66,8 @@ class Post(models.Model):
     def __str__(self):
         return self.title + ', Автор: ' + self.author.user.username
 
-    def get_absolute_url(self):  # добавим абсолютный путь, чтобы после создания нас перебрасывало на страницу с товаром
-        return f'/news/{self.id}'
+    def get_absolute_url(self):  # добавим абсолютный путь, чтобы после создания нас перебрасывало на страницу с новостью
+        return f'/{self.id}'
 
 
 class PostCategory(models.Model):

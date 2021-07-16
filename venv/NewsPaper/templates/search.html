@@ -21,6 +21,9 @@
             Created on
         </th>
         <th>
+            Category
+        </th>
+        <th>
             Preview
         </th>
     </thead>
@@ -31,6 +34,9 @@
         </td>
         <td>
             {{ news.post_created_on|date:'y-m-d'}}
+        </td>
+        <td>
+            {{ news.category }}
         </td>
         <td>
             {{ news.article_text|truncatechars:50 }}

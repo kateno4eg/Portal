@@ -25,5 +25,6 @@ urlpatterns = [
     path('', include('news.urls')),
     path('profile/', UserUpdateView.as_view()),
     path('profile/upgrade/', upgrade_me, name = 'upgrade'),
-    path('accounts/', include('allauth.urls'))
+    path('accounts/', include('allauth.urls')),
+    path('appointments/', include('appointments.urls')),
 ]

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'news',
     'news.templatetags',
     'django_filters',
+    'appointments',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -144,6 +145,7 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_FROM_EMAIL = 'skillf.trofimova@yandex.ru'
 
 SITE_ID = 1
 
@@ -161,3 +163,15 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_FORMS = {'signup': 'news.forms.BasicSignupForm'}
+
+EMAIL_HOST = 'smtp.yandex.ru'  # адрес сервера Яндекс-почты для всех один и тот же
+EMAIL_PORT = 465  # порт smtp сервера тоже одинаковый
+EMAIL_HOST_USER = 'skillf.trofimova'  # ваше имя пользователя
+EMAIL_HOST_PASSWORD = '4@kt69jrZD_8.mP'  # пароль от почты
+EMAIL_USE_SSL = True  # Яндекс использует ssl
+
+ADMINS = [
+    ('skillf.trofimova', 'sskillf.trofimova@yandex.ru'),
+    # список всех админов в формате ('имя', 'их почта')
+]
+SERVER_EMAIL = 'skillf.trofimova@yandex.ru'
