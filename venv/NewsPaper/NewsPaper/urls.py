@@ -19,6 +19,7 @@ from news import views
 from django.views.generic import RedirectView
 from news.views import UserUpdateView, upgrade_me
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('pages/', include('django.contrib.flatpages.urls')),
@@ -26,5 +27,4 @@ urlpatterns = [
     path('profile/', UserUpdateView.as_view()),
     path('profile/upgrade/', upgrade_me, name = 'upgrade'),
     path('accounts/', include('allauth.urls')),
-    path('appointments/', include('appointments.urls')),
 ]
